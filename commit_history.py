@@ -23,7 +23,7 @@ def get_commit_history(owner, repo):
     return commits
 
 # Example usage
-owner = "octocat"
-repo = "Hello-World"
+owner = "rafeyrana"
+repo = "DAILY-PM"
 commit_history = get_commit_history(owner, repo)
 print(commit_history)
