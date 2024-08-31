@@ -46,9 +46,54 @@ def print_formatted_commits(commits):
     for commit in commits:
         print(commit)
         print("-" * 50)
+def get_commit_details(owner, repo, commit_sha):
+    url = f"https://api.github.com/repos/{owner}/{repo}/commits/{commit_sha}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        commit_data = response.json()
+        files = commit_data['files']
+        
+        changes = []
+        for file in files:
+            changes.append({
+                'filename': file['filename'],
+                'status': file['status'],
+                'additions': file['additions'],
+                'deletions': file['deletions'],
+                'changes': file['changes'],
+                'patch': file.get('patch', 'No patch available')
+            })
+        
+        return changes
+    else:
+        print(f"Error fetching commit details: {response.status_code}")
+        print(response.text)
+        return None
+
+def print_commit_changes(owner, repo, commit):
+    changes = get_commit_details(owner, repo, commit.sha)
+    if changes:
+        print(f"Changes for commit {commit.sha[:7]}:")
+        for change in changes:
+            print(f"File: {change['filename']}")
+            print(f"Status: {change['status']}")
+            print(f"Additions: {change['additions']}, Deletions: {change['deletions']}, Changes: {change['changes']}")
+            print("Diff:")
+            print(change['patch'])
+            print("-" * 50)
+    else:
+        print(f"No changes found for commit {commit.sha[:7]}")
+
+
+
 
 owner = "rafeyrana"
 repo = "DAILY-PM"
 commit_history = get_commit_history(owner, repo)
 parsed_commits = parse_commits(commit_history)
-print_formatted_commits(parsed_commits)
+
+for commit in parsed_commits:
+    print(commit)
+    print_commit_changes(owner, repo, commit)
+    print("=" * 80)
