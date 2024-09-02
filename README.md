@@ -29,7 +29,7 @@ To run this project on your local machine, follow these steps:
 1. Clone the repository: `git clone https://github.com/rafeyrana/DAILY-PM.git`
 2. Navigate to the project directory: `cd DAILY-PM`
 3. Install the required dependencies: `pip install -r requirements.txt`
-4. Run the application: python commit_history.py
+4. Run the application: `python commit_history.py`
 
 ## Benefits
 
