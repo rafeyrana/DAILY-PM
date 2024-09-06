@@ -137,7 +137,10 @@ class VirtualPMGUI(QMainWindow):
             self.display_commits(commits)
         except Exception as e:
             self.commit_details.setText(f"Error: {str(e)}")
-        def generate_summary(self):
+
+
+            
+    def generate_summary(self):
         commits = self.get_displayed_commits()
         diffs = self.get_commit_diffs()
 
