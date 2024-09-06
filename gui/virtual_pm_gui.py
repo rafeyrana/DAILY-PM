@@ -137,6 +137,87 @@ class VirtualPMGUI(QMainWindow):
             self.display_commits(commits)
         except Exception as e:
             self.commit_details.setText(f"Error: {str(e)}")
+        def generate_summary(self):
+        commits = self.get_displayed_commits()
+        diffs = self.get_commit_diffs()
+
+        if not commits:
+            QMessageBox.warning(self, "No Commits", "No commits have been fetched. Please fetch commits first.")
+            return
+
+        prompt = self.create_summary_prompt(commits, diffs)
+
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-4-32k",  # Use the 32k context model
+                messages=[
+                    {"role": "system", "content": "You are a project manager assistant. Your task is to provide a detailed summary of the contributions and progress based on the commit history and code changes."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+
+            summary = response.choices[0].message['content']
+            self.display_summary(summary)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred while generating the summary: {str(e)}")
+
+    def get_displayed_commits(self):
+        commits = []
+        for i in range(self.commit_tree.topLevelItemCount()):
+            item = self.commit_tree.topLevelItem(i)
+            commit = {
+                "date": item.text(0),
+                "author": item.text(1),
+                "message": item.text(2),
+                "sha": item.data(0, Qt.UserRole)
+            }
+            commits.append(commit)
+        return commits
+
+    def get_commit_diffs(self):
+        diffs = {}
+        for i in range(self.commit_tree.topLevelItemCount()):
+            item = self.commit_tree.topLevelItem(i)
+            sha = item.data(0, Qt.UserRole)
+            owner = self.owner_entry.text()
+            repo = self.repo_entry.text()
+            changes = get_commit_details(owner, repo, sha)
+            if changes:
+                diffs[sha] = changes
+        return diffs
+
+    def create_summary_prompt(self, commits, diffs):
+        prompt = "Please provide a detailed summary of the following commits and code changes:\n\n"
+        prompt += "Commits:\n"
+        for commit in commits:
+            prompt += f"- {commit['date']} by {commit['author']}: {commit['message']} (SHA: {commit['sha']})\n"
+
+        prompt += "\nCode Changes:\n"
+        for sha, changes in diffs.items():
+            prompt += f"Commit {sha[:7]}:\n"
+            for change in changes:
+                prompt += f"  File: {change['filename']}\n"
+                prompt += f"  Status: {change['status']}\n"
+                prompt += f"  Additions: {change['additions']}, Deletions: {change['deletions']}, Changes: {change['changes']}\n"
+                prompt += f"  Diff:\n{change['patch']}\n\n"
+
+        prompt += "\nBased on these commits and code changes, please provide:\n"
+        prompt += "1. An overview of the main contributions and progress made\n"
+        prompt += "2. Key features or improvements implemented\n"
+        prompt += "3. Any notable code refactoring or architectural changes\n"
+        prompt += "4. Potential areas of concern or technical debt introduced\n"
+        prompt += "5. Suggestions for next steps or areas that might need attention\n"
+
+        return prompt
+
+    def display_summary(self, summary):
+        summary_dialog = QMessageBox(self)
+        summary_dialog.setWindowTitle("Contribution Summary")
+        summary_dialog.setText(summary)
+        summary_dialog.setDetailedText(summary)
+        summary_dialog.setStandardButtons(QMessageBox.Ok)
+        summary_dialog.exec_()
+
 
     def parse_date(self, date_string):
         if date_string:
