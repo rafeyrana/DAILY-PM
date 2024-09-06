@@ -6,6 +6,8 @@ from PyQt5.QtCore import Qt
 from dotenv import load_dotenv
 import os
 from utils.commit_utils import get_commit_history, parse_commits, get_commit_details, Commit
+import json
+from PyQt5.QtWidgets import QMessageBox
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -85,6 +87,10 @@ class VirtualPMGUI(QMainWindow):
 
         param_commit_layout.addWidget(commit_splitter)
 
+        # summary button
+        self.summary_button = QPushButton("Generate Summary")
+        self.summary_button.clicked.connect(self.generate_summary)
+        param_commit_layout.addWidget(self.summary_button)
         # Add widgets to main layout
         main_splitter = QSplitter(Qt.Horizontal)
         main_splitter.addWidget(chat_widget)
