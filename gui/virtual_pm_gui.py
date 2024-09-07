@@ -152,7 +152,7 @@ class VirtualPMGUI(QMainWindow):
 
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-4-turbo",  # Use the 32k context model
+                model="gpt-4-turbo", 
                 messages=[
                     {"role": "system", "content": "You are a project manager assistant. Your task is to provide a detailed summary of the contributions and progress based on the commit history and code changes."},
                     {"role": "user", "content": prompt}
