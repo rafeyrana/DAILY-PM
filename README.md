@@ -1,4 +1,4 @@
-# GitHub Commit History Viewer
+# Natural Language Search, Visualisation and Analysis for Github Repositories
 
 This application allows you to visualize and explore the commit history of any GitHub repository using Natural Language. It provides a user-friendly interface to analyze code changes across different commits and files.
 
