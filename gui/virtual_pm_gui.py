@@ -87,10 +87,17 @@ class VirtualPMGUI(QMainWindow):
 
         param_commit_layout.addWidget(commit_splitter)
 
-        # summary button
+        # Summary display
+        self.summary_display = QTextEdit()
+        self.summary_display.setReadOnly(True)
+        param_commit_layout.addWidget(QLabel("Summary:"))
+        param_commit_layout.addWidget(self.summary_display)
+
+        # Summary button
         self.summary_button = QPushButton("Generate Summary")
         self.summary_button.clicked.connect(self.generate_summary)
         param_commit_layout.addWidget(self.summary_button)
+
         # Add widgets to main layout
         main_splitter = QSplitter(Qt.Horizontal)
         main_splitter.addWidget(chat_widget)
@@ -163,6 +170,9 @@ class VirtualPMGUI(QMainWindow):
             self.display_summary(summary)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while generating the summary: {str(e)}")
+
+    def display_summary(self, summary):
+        self.summary_display.setText(summary)  # Set the summary in the summary display area
 
     def get_displayed_commits(self):
         commits = []
