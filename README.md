@@ -1,6 +1,6 @@
 # GitHub Commit History Viewer
 
-This application allows you to visualize and explore the commit history of any GitHub repository with customizable parameters. It provides a user-friendly interface to analyze code changes across different commits and files.
+This application allows you to visualize and explore the commit history of any GitHub repository using Natural Language. It provides a user-friendly interface to analyze code changes across different commits and files.
 
 ![GitHub Commit History Viewer Interface](GUI.png)
 
@@ -13,6 +13,7 @@ This application allows you to visualize and explore the commit history of any G
 - **Path-based Filtering**: Focus on changes in specific files or directories by entering a file path.
 - **Detailed Commit Information**: View commit date, author, and commit message for each entry.
 - **Code Diff Visualization**: Select a commit to see detailed changes, including file modifications, additions, and deletions.
+- **Technical Summary Generation**: Generate a detailed technical summary of contributions for any repository, branch, contributor, and time frame. This summary can also be emailed in proper markdown format to any stakeholders or people of interest.
 
 ## How It Works
 
@@ -20,7 +21,8 @@ This application allows you to visualize and explore the commit history of any G
 2. **Fetch Commits**: Click the "Fetch Commits" button to retrieve the commit history based on your parameters.
 3. **Browse Commits**: The main window displays a list of commits matching your criteria, showing date, author, and commit message.
 4. **View Changes**: Click on any commit in the list to see detailed code changes in the bottom pane, including file-by-file diffs.
-
+5. **Generate Summary**: Click the Generate Summary button to generate a technical code review or summary of the changes made in the filtered commits.
+6. **Email**: Enter the email address and click Send Email button to share the Summary with others.
 
 ## How to Run
 
@@ -29,7 +31,7 @@ To run this project on your local machine, follow these steps:
 1. Clone the repository: `git clone https://github.com/rafeyrana/DAILY-PM.git`
 2. Navigate to the project directory: `cd DAILY-PM`
 3. Install the required dependencies: `pip install -r requirements.txt`
-4. Run the application: `python commit_history.py`
+4. Run the application: `python main.py`
 
 ## Benefits
 
